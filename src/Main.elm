@@ -5,7 +5,6 @@ import Html.Attributes exposing (value, class, placeholder)
 import Html.Events exposing (onClick)
 import Time exposing (Time, second, inSeconds)
 import Task
-import Debug
 
 
 ---- MODEL ----
@@ -13,7 +12,7 @@ import Debug
 
 type alias Timer =
     { started : Time
-    , elapsed : Float
+    , elapsed : Int
     }
 
 
@@ -38,36 +37,29 @@ type Msg
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update smsg smodel =
-    let
-        msg =
-            Debug.log "msg" smsg
+update msg model =
+    case msg of
+        StartTimer ->
+            ( model, Task.perform SetStartTime Time.now )
 
-        model =
-            Debug.log "model" smodel
-    in
-        case msg of
-            StartTimer ->
-                ( model, Task.perform SetStartTime Time.now )
+        StopTimer ->
+            ( { model | timer = Nothing }, Cmd.none )
 
-            StopTimer ->
-                ( { model | timer = Nothing }, Cmd.none )
+        SetStartTime time ->
+            ( { model | timer = Just <| Timer time 0 }, Cmd.none )
 
-            SetStartTime time ->
-                ( { model | timer = Just <| Timer time 0 }, Cmd.none )
+        Tick time ->
+            case model.timer of
+                Just timer ->
+                    ( { model | timer = Just (updateTimer timer time) }, Cmd.none )
 
-            Tick time ->
-                case model.timer of
-                    Just timer ->
-                        ( { model | timer = Just (updateTimer timer time) }, Cmd.none )
-
-                    Nothing ->
-                        ( model, Cmd.none )
+                Nothing ->
+                    ( model, Cmd.none )
 
 
 updateTimer : Timer -> Time -> Timer
 updateTimer timer time =
-    { timer | elapsed = inSeconds time - inSeconds timer.started }
+    { timer | elapsed = round <| inSeconds time - inSeconds timer.started }
 
 
 
