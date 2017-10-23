@@ -3,7 +3,7 @@ module Main exposing (..)
 import Html exposing (Html, text, div, img, button, input)
 import Html.Attributes exposing (value, class, placeholder)
 import Html.Events exposing (onClick)
-import Time exposing (Time)
+import Time exposing (Time, second, inSeconds)
 import Task
 import Debug
 
@@ -11,13 +11,19 @@ import Debug
 ---- MODEL ----
 
 
+type alias Timer =
+    { started : Time
+    , elapsed : Float
+    }
+
+
 type alias Model =
-    { time : Maybe Time }
+    { timer : Maybe Timer }
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( { time = Nothing }, Cmd.none )
+    ( { timer = Nothing }, Cmd.none )
 
 
 
@@ -26,24 +32,38 @@ init =
 
 type Msg
     = StartTimer
-    | NewTime Time
+    | SetStartTime Time
+    | Tick Time
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
+update smsg smodel =
     let
-        loggedMsg =
-            Debug.log "msg" msg
+        msg =
+            Debug.log "msg" smsg
 
-        loggedModel =
-            Debug.log "model" model
+        model =
+            Debug.log "model" smodel
     in
-        case loggedMsg of
+        case msg of
             StartTimer ->
-                ( loggedModel, Task.perform NewTime Time.now )
+                ( model, Task.perform SetStartTime Time.now )
 
-            NewTime time ->
-                ( { loggedModel | time = Just time }, Cmd.none )
+            SetStartTime time ->
+                ( { model | timer = Just <| Timer time 0 }, Cmd.none )
+
+            Tick time ->
+                case model.timer of
+                    Just timer ->
+                        ( { model | timer = Just (updateTimer timer time) }, Cmd.none )
+
+                    Nothing ->
+                        ( model, Cmd.none )
+
+
+updateTimer : Timer -> Time -> Timer
+updateTimer timer time =
+    { timer | elapsed = inSeconds time - inSeconds timer.started }
 
 
 
@@ -67,6 +87,20 @@ viewTime model =
 
 
 
+---- SUBSCRIPTIONS ----
+
+
+subscriptions : Model -> Sub Msg
+subscriptions model =
+    case model.timer of
+        Nothing ->
+            Sub.none
+
+        _ ->
+            Time.every second Tick
+
+
+
 ---- PROGRAM ----
 
 
@@ -76,5 +110,5 @@ main =
         { view = view
         , init = init
         , update = update
-        , subscriptions = always Sub.none
+        , subscriptions = subscriptions
         }
