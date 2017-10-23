@@ -32,6 +32,7 @@ init =
 
 type Msg
     = StartTimer
+    | StopTimer
     | SetStartTime Time
     | Tick Time
 
@@ -48,6 +49,9 @@ update smsg smodel =
         case msg of
             StartTimer ->
                 ( model, Task.perform SetStartTime Time.now )
+
+            StopTimer ->
+                ( { model | timer = Nothing }, Cmd.none )
 
             SetStartTime time ->
                 ( { model | timer = Just <| Timer time 0 }, Cmd.none )
@@ -75,9 +79,19 @@ view model =
     div []
         [ input [ class "time-input", value "25", placeholder "mm" ] []
         , input [ class "time-input", value "00", placeholder "ss" ] []
-        , button [ onClick StartTimer ] [ text "Start" ]
+        , viewButton model
         , viewTime model
         ]
+
+
+viewButton : Model -> Html Msg
+viewButton model =
+    case model.timer of
+        Nothing ->
+            button [ onClick StartTimer ] [ text "Start" ]
+
+        Just _ ->
+            button [ onClick StopTimer ] [ text "Stop" ]
 
 
 viewTime : Model -> Html Msg
