@@ -3,8 +3,17 @@ module Main exposing (..)
 import Html exposing (Html, text, div, img, button, input)
 import Html.Attributes exposing (value, class, placeholder)
 import Html.Events exposing (onClick)
-import Time exposing (Time, second, inSeconds)
+import Time exposing (Time, millisecond, inMilliseconds)
 import Task
+
+
+---- CONFIG ----
+
+
+ticksPerSecond : Float
+ticksPerSecond =
+    10
+
 
 
 ---- MODEL ----
@@ -59,7 +68,14 @@ update msg model =
 
 updateTimer : Timer -> Time -> Timer
 updateTimer timer time =
-    { timer | elapsed = round <| inSeconds time - inSeconds timer.started }
+    let
+        ms =
+            inMilliseconds time - inMilliseconds timer.started
+
+        elapsed =
+            round <| ms * ticksPerSecond / 1000
+    in
+        { timer | elapsed = elapsed }
 
 
 
@@ -72,7 +88,7 @@ view model =
         [ input [ class "time-input", value "25", placeholder "mm" ] []
         , input [ class "time-input", value "00", placeholder "ss" ] []
         , viewButton model
-        , viewTime model
+        , viewTime model.timer
         ]
 
 
@@ -86,10 +102,14 @@ viewButton model =
             button [ onClick StopTimer ] [ text "Stop" ]
 
 
-viewTime : Model -> Html Msg
-viewTime model =
-    div []
-        [ text "time svg" ]
+viewTime : Maybe Timer -> Html Msg
+viewTime timer =
+    case timer of
+        Nothing ->
+            div [] []
+
+        Just { elapsed } ->
+            div [] [ text <| toString elapsed ]
 
 
 
@@ -103,7 +123,7 @@ subscriptions model =
             Sub.none
 
         _ ->
-            Time.every second Tick
+            Time.every (1000 * millisecond / ticksPerSecond) Tick
 
 
 
