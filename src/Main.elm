@@ -4,7 +4,24 @@ import Html exposing (Html, text, div, img, button, input)
 import Html.Attributes exposing (value, class, placeholder)
 import Html.Events exposing (onClick)
 import Svg exposing (circle, line, svg)
-import Svg.Attributes exposing (viewBox, width, cx, cy, r, fill, x1, y1, x2, y2, stroke)
+import Svg.Attributes
+    exposing
+        ( viewBox
+        , width
+        , cx
+        , cy
+        , r
+        , fill
+        , x1
+        , y1
+        , x2
+        , y2
+        , stroke
+        , strokeDasharray
+        , strokeDashoffset
+        , strokeWidth
+        , transform
+        )
 import Time exposing (Time, millisecond, inMilliseconds)
 import Task
 
@@ -14,7 +31,7 @@ import Task
 
 ticksPerSecond : Float
 ticksPerSecond =
-    10
+    30
 
 
 
@@ -90,7 +107,7 @@ view model =
         [ input [ class "time-input", value "25", placeholder "mm" ] []
         , input [ class "time-input", value "00", placeholder "ss" ] []
         , viewButton model
-        , viewTime model.timer
+        , div [ class "time-chart" ] [ viewTime model.timer ]
         ]
 
 
@@ -106,37 +123,41 @@ viewButton model =
 
 viewTime : Maybe Timer -> Html Msg
 viewTime timer =
-    div []
-        (case timer of
-            Nothing ->
-                []
+    case timer of
+        Nothing ->
+            viewPie 0
 
-            Just { elapsed } ->
-                -- div [] [ text <| toString elapsed ]
-                let
-                    angle =
-                        Debug.log "angle" <|
-                            turns <|
-                                Debug.log "elapsed" <|
-                                    pi
-                                        * toFloat elapsed
-                                        / (25 * 60 * ticksPerSecond)
-
-                    handX =
-                        toString (50 + 50 * cos angle)
-
-                    handY =
-                        toString (50 + 50 * sin angle)
-                in
-                    [ viewSvg handX handY ]
-        )
+        Just { elapsed } ->
+            viewPie ((toFloat elapsed) / (1 * 60 * ticksPerSecond))
 
 
-viewSvg : String -> String -> Html Msg
-viewSvg handX handY =
+viewPie : Float -> Html Msg
+viewPie percentage =
     svg [ viewBox "0 0 100 100", width "300px" ]
-        [ circle [ cx "50", cy "50", r "50", fill "#0B79CE" ] []
-        , line [ x1 "50", y1 "50", x2 handX, y2 handY, stroke "#023963" ] []
+        [ circle
+            [ cx "50"
+            , cy "50"
+            , r "40"
+
+            -- , fill "#0B79CE"
+            , fill "white"
+            , stroke "#0B79CE"
+            ]
+            []
+        , circle
+            [ cx "50"
+            , cy "50"
+            , r "20"
+
+            -- , fill "#0B79CE"
+            -- , stroke "white"
+            , fill "white"
+            , stroke "#0B79CE"
+            , strokeWidth "40"
+            , strokeDasharray ((toString (percentage * 126)) ++ " 126")
+            , transform "rotate(-90 50 50)"
+            ]
+            []
         ]
 
 
