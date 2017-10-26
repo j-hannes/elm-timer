@@ -1,5 +1,6 @@
 body {
-  font-family: 'Source Sans Pro', 'Trebuchet MS', 'Lucida Grande', 'Bitstream Vera Sans', 'Helvetica Neue', sans-serif;
+  font-family: 'Source Sans Pro', 'Trebuchet MS', 'Lucida Grande',
+    'Bitstream Vera Sans', 'Helvetica Neue', sans-serif;
   font-size: 30px;
   margin: 0;
   text-align: center;
@@ -16,4 +17,68 @@ img {
   width: 20px;
   text-align: center;
   margin-right: 5px;
+}
+
+/* pie chart */
+
+.pie {
+  position: absolute;
+  width: 100px;
+  height: 200px;
+  overflow: hidden;
+  transform-origin: left center;
+  width: 200px;
+  height: 200px;
+  top: 50px;
+  left: calc(50% - 100px);
+  transform-origin: center center;
+  transition-property: transform;
+  transition-timing-function: linear;
+}
+
+.pie:before {
+  content: '';
+  position: absolute;
+  width: 100px;
+  height: 200px;
+  left: -100px;
+  border-radius: 100px 0 0 100px;
+  transform-origin: right center;
+  z-index: 1;
+  left: 0px;
+  transform: rotate(0deg);
+  background-color: #0b79ce;
+}
+pie.one:before {
+  transform: rotate(0deg);
+}
+
+.pie:after {
+  content: '';
+  position: absolute;
+  width: 100px;
+  height: 200px;
+  left: 100px;
+  z-index: 3;
+  transform-origin: left center;
+  border-radius: 0 100px 100px 0;
+  transform: rotate(0deg);
+  background-color: #0b79ce;
+}
+.pie.one:after {
+/*.pie:after {*/
+  transform: rotate(180deg);
+  transition-duration: 5s;
+  transition-timing-function: linear;
+}
+/*.pie.two:after {*/
+/*.pie:after {
+  transform: rotate(0deg);
+  transition: all 0s;
+  background-color: white;
+}*/
+
+
+.pie.active {
+  transform: rotate(120deg);
 }
