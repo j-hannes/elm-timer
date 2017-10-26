@@ -22,7 +22,7 @@ ticksPerSecond =
 
 timerTimeInSeconds : Float
 timerTimeInSeconds =
-    60
+    25 * 60
 
 
 

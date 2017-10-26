@@ -68,11 +68,11 @@ img {
 }
 
 .pie.toHalf:after {
-  transition-duration: 30s;
+  transition-duration: 750s;
   transform: rotate(180deg);
 }
 .pie.toFull:before {
-  transition-duration: 30s;
+  transition-duration: 750s;
   transform: rotate(180deg);
 }
 .pie.toFull:after {
