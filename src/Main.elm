@@ -22,7 +22,7 @@ ticksPerSecond =
 
 timerTimeInSeconds : Float
 timerTimeInSeconds =
-    10
+    60
 
 
 
@@ -82,6 +82,8 @@ update msg model =
                             if (model.pie == Half) then
                                 Full
                             else if (model.pie == Full) then
+                                Finished
+                            else if (model.pie == Finished) then
                                 Finished
                             else
                                 None
@@ -148,21 +150,14 @@ viewPie percentage pie =
         [ class "pie"
         , class
             (if pie == Half then
-                Debug.log "one" "one"
+                Debug.log "towards half" "toHalf"
              else if pie == Full then
-                Debug.log "two" "two"
+                Debug.log "towards full" "toFull"
              else if pie == Finished then
-                Debug.log "three" "three"
+                Debug.log "finished" "finished"
              else
-                ""
+                Debug.log "none" ""
             )
-
-        -- , class
-        --     (if percentage > 0 then
-        --         "active"
-        --      else
-        --         ""
-        --     )
         , attribute "data-start" "100"
         , attribute "data-value" "260"
         ]

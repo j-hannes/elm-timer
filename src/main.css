@@ -36,15 +36,18 @@ img {
   transition-timing-function: linear;
 }
 
-.pie:before {
+.pie:before,
+.pie:after {
   content: '';
   position: absolute;
   width: 100px;
   height: 200px;
+}
+
+.pie:before {
   left: -100px;
   border-radius: 100px 0 0 100px;
   transform-origin: right center;
-  z-index: 1;
   left: 0px;
   transform: rotate(0deg);
   background-color: #0b79ce;
@@ -52,18 +55,9 @@ img {
   transition-property: transform;
   transition-timing-function: linear;
 }
-.pie.two:before {
-  transition-duration: 5s;
-  transform: rotate(180deg);
-}
-
 .pie:after {
-  content: '';
-  position: absolute;
-  width: 100px;
-  height: 200px;
   left: 100px;
-  z-index: 3;
+  z-index: 2;
   transform-origin: left center;
   border-radius: 0 100px 100px 0;
   transform: rotate(0deg);
@@ -72,16 +66,22 @@ img {
   transition-property: transform;
   transition-timing-function: linear;
 }
-.pie.one:after {
-  transition-duration: 5s;
+
+.pie.toHalf:after {
+  transition-duration: 30s;
   transform: rotate(180deg);
 }
-.pie.two:after {
+.pie.toFull:before {
+  transition-duration: 30s;
+  transform: rotate(180deg);
+}
+.pie.toFull:after {
   transform: rotate(0deg);
   background-color: white;
+  border-radius: 0 90px 90px 0;
 }
 
-.pie.three:before,
-.pie.three:after {
-  background-color: yellow;
+.pie.finished:before,
+.pie.finished:after {
+  background-color: orange;
 }
