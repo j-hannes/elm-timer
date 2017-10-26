@@ -81,6 +81,8 @@ update msg model =
                         pie =
                             if (model.pie == Half) then
                                 Full
+                            else if (model.pie == Full) then
+                                Finished
                             else
                                 None
                     in
@@ -146,7 +148,11 @@ viewPie percentage pie =
         [ class "pie"
         , class
             (if pie == Half then
-                "one"
+                Debug.log "one" "one"
+             else if pie == Full then
+                Debug.log "two" "two"
+             else if pie == Finished then
+                Debug.log "three" "three"
              else
                 ""
             )

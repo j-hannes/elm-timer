@@ -48,9 +48,13 @@ img {
   left: 0px;
   transform: rotate(0deg);
   background-color: #0b79ce;
+  transition-duration: 0s;
+  transition-property: transform;
+  transition-timing-function: linear;
 }
-pie.one:before {
-  transform: rotate(0deg);
+.pie.two:before {
+  transition-duration: 5s;
+  transform: rotate(180deg);
 }
 
 .pie:after {
@@ -64,21 +68,20 @@ pie.one:before {
   border-radius: 0 100px 100px 0;
   transform: rotate(0deg);
   background-color: #0b79ce;
-}
-.pie.one:after {
-/*.pie:after {*/
-  transform: rotate(180deg);
-  transition-duration: 5s;
+  transition-duration: 0s;
+  transition-property: transform;
   transition-timing-function: linear;
 }
-/*.pie.two:after {*/
-/*.pie:after {
+.pie.one:after {
+  transition-duration: 5s;
+  transform: rotate(180deg);
+}
+.pie.two:after {
   transform: rotate(0deg);
-  transition: all 0s;
   background-color: white;
-}*/
+}
 
-
-.pie.active {
-  transform: rotate(120deg);
+.pie.three:before,
+.pie.three:after {
+  background-color: yellow;
 }
