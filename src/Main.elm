@@ -165,27 +165,6 @@ viewPie percentage pie =
 
 
 
--- svg [ viewBox "0 0 100 100", width "300px" ]
---     [ circle
---         [ cx "50"
---         , cy "50"
---         , r "40"
---         , fill "white"
---         , stroke "#0B79CE"
---         ]
---         []
---     , circle
---         [ cx "50"
---         , cy "50"
---         , r "20"
---         , fill "white"
---         , stroke "#0B79CE"
---         , strokeWidth "40"
---         , strokeDasharray ((toString (percentage * 126)) ++ " 126")
---         , transform "rotate(-90 50 50)"
---         ]
---         []
---     ]
 ---- SUBSCRIPTIONS ----
 
 
